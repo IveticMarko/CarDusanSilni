@@ -1,0 +1,12 @@
+C:\Users\User\Desktop\CDS_app\mmaTeamCDS_desktopApp\mmaTeamCDS_desktopApp\bin\Debug\mmaTeamCDS_desktopApp.exe
+C:\Users\User\Desktop\CDS_app\mmaTeamCDS_desktopApp\mmaTeamCDS_desktopApp\bin\Debug\mmaTeamCDS_desktopApp.exe.config
+C:\Users\User\Desktop\CDS_app\mmaTeamCDS_desktopApp\mmaTeamCDS_desktopApp\obj\Debug\mmaTeamCDS_desktopApp.Form1.resources
+C:\Users\User\Desktop\CDS_app\mmaTeamCDS_desktopApp\mmaTeamCDS_desktopApp\obj\Debug\mmaTeamCDS_desktopApp.Main.resources
+C:\Users\User\Desktop\CDS_app\mmaTeamCDS_desktopApp\mmaTeamCDS_desktopApp\obj\Debug\mmaTeamCDS_desktopApp.Properties.Resources.resources
+C:\Users\User\Desktop\CDS_app\mmaTeamCDS_desktopApp\mmaTeamCDS_desktopApp\obj\Debug\mmaTeamCDS_desktopApp.csproj.GenerateResource.Cache
+C:\Users\User\Desktop\CDS_app\mmaTeamCDS_desktopApp\mmaTeamCDS_desktopApp\obj\Debug\mmaTeamCDS_desktopApp.exe
+C:\Users\User\Desktop\CDS_app\mmaTeamCDS_desktopApp\mmaTeamCDS_desktopApp\obj\Debug\mmaTeamCDS_desktopApp.pdb
+C:\Users\User\Desktop\CDS_app\mmaTeamCDS_desktopApp\mmaTeamCDS_desktopApp\bin\Debug\mmaTeamCDS_desktopApp.pdb
+C:\Users\User\Desktop\CDS_app\mmaTeamCDS_desktopApp\mmaTeamCDS_desktopApp\obj\Debug\mmaTeamCDS_desktopApp.UserControl1.resources
+C:\Users\User\Desktop\CDS_app\mmaTeamCDS_desktopApp\mmaTeamCDS_desktopApp\obj\Debug\mmaTeamCDS_desktopApp.UserControl2.resources
+C:\Users\User\Desktop\CDS_app\mmaTeamCDS_desktopApp\mmaTeamCDS_desktopApp\obj\Debug\mmaTeamCDS_desktopApp.csprojResolveAssemblyReference.cache
