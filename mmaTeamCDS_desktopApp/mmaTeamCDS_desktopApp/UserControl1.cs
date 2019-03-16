@@ -29,7 +29,8 @@ namespace mmaTeamCDS_desktopApp
 
             SqlConnection sqlConn = new SqlConnection(@"Server=.\SQLEXPRESS;Database=CDS;Integrated Security=true");
             const string SQL_LOAD_ALL_MEMBERS = @"SELECT CardNumber, ScreenName, StartDate, EndDate
-                                                  FROM memberstable";
+                                                  FROM memberstable
+                                                  ORDER BY FirstName, LastName";
 
             using (SqlCommand cmd = new SqlCommand(SQL_LOAD_ALL_MEMBERS, sqlConn))
             {
@@ -45,7 +46,7 @@ namespace mmaTeamCDS_desktopApp
                             member.Broj_kartice = Int32.Parse((reader["CardNumber"].ToString()));
                             member.Član = reader["ScreenName"].ToString();
                             member.Datum_uplate = DateTime.Parse(reader["StartDate"].ToString()).ToString("dddd, dd MMMM yyyy");
-                            member.Datum_isplate = DateTime.Parse(reader["EndDate"].ToString()).ToString("dddd, dd MMMM yyyy");
+                            member.Datum_isteka = DateTime.Parse(reader["EndDate"].ToString()).ToString("dddd, dd MMMM yyyy");
 
                             listOfMembers.Add(member);
                         }
@@ -56,13 +57,14 @@ namespace mmaTeamCDS_desktopApp
             dataGridView1.DataSource = listOfMembers;
 
             //Dis doesn't work but try again.
-            //foreach (DataGridViewRow row in dataGridView1.Rows)
-            //{
-            //    if (Convert.ToInt32(row.Cells[0].Value) == 5)
-            //    {
-            //        row.DefaultCellStyle.BackColor = Color.Red;
-            //    }
-            //}
+            foreach (DataGridViewRow row in dataGridView1.Rows)
+            {
+                //row.Cells[0].ReadOnly = true;
+                //if (Convert.ToInt32(row.Cells[0].Value) == 5)
+                //{
+                //    row.DefaultCellStyle.BackColor = Color.Red;
+                //}
+            }
         }
 
         private void dataGridView1_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
@@ -144,7 +146,7 @@ namespace mmaTeamCDS_desktopApp
                             member.Broj_kartice = Int32.Parse((reader["CardNumber"].ToString()));
                             member.Član = reader["ScreenName"].ToString();
                             member.Datum_uplate = DateTime.Parse(reader["StartDate"].ToString()).ToString("dddd, dd MMMM yyyy");
-                            member.Datum_isplate = DateTime.Parse(reader["EndDate"].ToString()).ToString("dddd, dd MMMM yyyy");
+                            member.Datum_isteka = DateTime.Parse(reader["EndDate"].ToString()).ToString("dddd, dd MMMM yyyy");
 
                             listOfMembers.Add(member);
                         }
@@ -153,6 +155,138 @@ namespace mmaTeamCDS_desktopApp
             }
 
             dataGridView1.DataSource = listOfMembers;
+        }
+
+        private void radioButton1_CheckedChanged(object sender, EventArgs e)
+        {
+            List<Member> listOfMembers = new List<Member>();
+
+            SqlConnection sqlConn = new SqlConnection(@"Server=.\SQLEXPRESS;Database=CDS;Integrated Security=true");
+            const string SQL_LOAD_ALL_MEMBERS = @"SELECT CardNumber, ScreenName, StartDate, EndDate
+                                                  FROM memberstable
+                                                  ORDER BY FirstName, LastName";
+
+            using (SqlCommand cmd = new SqlCommand(SQL_LOAD_ALL_MEMBERS, sqlConn))
+            {
+                sqlConn.Open();
+
+                using (SqlDataReader reader = cmd.ExecuteReader())
+                {
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            Member member = new Member();
+                            member.Broj_kartice = Int32.Parse((reader["CardNumber"].ToString()));
+                            member.Član = reader["ScreenName"].ToString();
+                            member.Datum_uplate = DateTime.Parse(reader["StartDate"].ToString()).ToString("dddd, dd MMMM yyyy");
+                            member.Datum_isteka = DateTime.Parse(reader["EndDate"].ToString()).ToString("dddd, dd MMMM yyyy");
+
+                            listOfMembers.Add(member);
+                        }
+                    }
+                }
+            }
+
+            dataGridView1.DataSource = listOfMembers;
+        }
+
+        private void radioButton2_CheckedChanged(object sender, EventArgs e)
+        {
+            List<Member> listOfMembers = new List<Member>();
+
+            SqlConnection sqlConn = new SqlConnection(@"Server=.\SQLEXPRESS;Database=CDS;Integrated Security=true");
+            const string SQL_LOAD_ALL_MEMBERS = @"SELECT CardNumber, ScreenName, StartDate, EndDate
+                                                  FROM memberstable
+                                                  ORDER BY CardNumber";
+
+            using (SqlCommand cmd = new SqlCommand(SQL_LOAD_ALL_MEMBERS, sqlConn))
+            {
+                sqlConn.Open();
+
+                using (SqlDataReader reader = cmd.ExecuteReader())
+                {
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            Member member = new Member();
+                            member.Broj_kartice = Int32.Parse((reader["CardNumber"].ToString()));
+                            member.Član = reader["ScreenName"].ToString();
+                            member.Datum_uplate = DateTime.Parse(reader["StartDate"].ToString()).ToString("dddd, dd MMMM yyyy");
+                            member.Datum_isteka = DateTime.Parse(reader["EndDate"].ToString()).ToString("dddd, dd MMMM yyyy");
+
+                            listOfMembers.Add(member);
+                        }
+                    }
+                }
+            }
+
+            dataGridView1.DataSource = listOfMembers;
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            textBox1.Clear();
+
+            List<Member> listOfMembers = new List<Member>();
+
+            SqlConnection sqlConn = new SqlConnection(@"Server=.\SQLEXPRESS;Database=CDS;Integrated Security=true");
+            const string SQL_LOAD_ALL_MEMBERS = @"SELECT CardNumber, ScreenName, StartDate, EndDate
+                                                  FROM memberstable
+                                                  ORDER BY FirstName, LastName";
+
+            using (SqlCommand cmd = new SqlCommand(SQL_LOAD_ALL_MEMBERS, sqlConn))
+            {
+                sqlConn.Open();
+
+                using (SqlDataReader reader = cmd.ExecuteReader())
+                {
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            Member member = new Member();
+                            member.Broj_kartice = Int32.Parse((reader["CardNumber"].ToString()));
+                            member.Član = reader["ScreenName"].ToString();
+                            member.Datum_uplate = DateTime.Parse(reader["StartDate"].ToString()).ToString("dddd, dd MMMM yyyy");
+                            member.Datum_isteka = DateTime.Parse(reader["EndDate"].ToString()).ToString("dddd, dd MMMM yyyy");
+
+                            listOfMembers.Add(member);
+                        }
+                    }
+                }
+            }
+
+            dataGridView1.DataSource = listOfMembers;
+        }
+
+        Bitmap bmp;
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            int height = dataGridView1.Height;
+            dataGridView1.Height = dataGridView1.RowCount * dataGridView1.RowTemplate.Height * 2;
+            bmp = new Bitmap(dataGridView1.Width, dataGridView1.Height);
+            dataGridView1.DrawToBitmap(bmp, new Rectangle(0, 0, dataGridView1.Width, dataGridView1.Height));
+            dataGridView1.Height = height;
+            printPreviewDialog1.ShowDialog();
+        }
+
+        private void printDocument1_PrintPage(object sender, System.Drawing.Printing.PrintPageEventArgs e)
+        {
+            e.Graphics.DrawImage(bmp, 0, 0);
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            AddOrUpdateForm mainForm = new AddOrUpdateForm();
+            mainForm.ShowDialog();
         }
     }
 }

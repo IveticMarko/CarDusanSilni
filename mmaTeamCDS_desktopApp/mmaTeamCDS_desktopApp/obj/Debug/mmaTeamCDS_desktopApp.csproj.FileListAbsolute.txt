@@ -22,3 +22,4 @@ C:\Users\User\Desktop\CDS_app\CarDusanSilni\mmaTeamCDS_desktopApp\mmaTeamCDS_des
 C:\Users\User\Desktop\CDS_app\CarDusanSilni\mmaTeamCDS_desktopApp\mmaTeamCDS_desktopApp\obj\Debug\mmaTeamCDS_desktopApp.csproj.GenerateResource.Cache
 C:\Users\User\Desktop\CDS_app\CarDusanSilni\mmaTeamCDS_desktopApp\mmaTeamCDS_desktopApp\obj\Debug\mmaTeamCDS_desktopApp.exe
 C:\Users\User\Desktop\CDS_app\CarDusanSilni\mmaTeamCDS_desktopApp\mmaTeamCDS_desktopApp\obj\Debug\mmaTeamCDS_desktopApp.pdb
+C:\Users\User\Desktop\CDS_app\CarDusanSilni\mmaTeamCDS_desktopApp\mmaTeamCDS_desktopApp\obj\Debug\mmaTeamCDS_desktopApp.AddOrUpdateForm.resources

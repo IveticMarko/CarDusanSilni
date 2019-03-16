@@ -38,6 +38,7 @@ namespace mmaTeamCDS_desktopApp
                 else if (dialog == DialogResult.No)
                 {
                     e.Cancel = true;
+                    isAlreadyClickedExit = false;
                 }
             }
         }

@@ -11,6 +11,6 @@ namespace mmaTeamCDS_desktopApp
         public int Broj_kartice { get; set; }
         public string Član { get; set; }
         public string Datum_uplate { get; set; }
-        public string Datum_isplate { get; set; }
+        public string Datum_isteka { get; set; }
     }
 }
