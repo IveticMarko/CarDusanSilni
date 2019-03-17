@@ -111,7 +111,8 @@ namespace mmaTeamCDS_desktopApp
             }
 
             const string SQL_LOAD_ALL_MEMBERS = @"SELECT ScreenName, CardNumber, StartDate, EndDate
-                                                  FROM memberstable";
+                                                  FROM memberstable
+                                                  ORDER BY FirstName, LastName";
 
             const string SQL_LOAD_MEMBERS = @"SELECT ScreenName, CardNumber, StartDate, EndDate
                                                   FROM memberstable
@@ -228,6 +229,7 @@ namespace mmaTeamCDS_desktopApp
         private void button2_Click(object sender, EventArgs e)
         {
             textBox1.Clear();
+            textBox2.Clear();
 
             List<Member> listOfMembers = new List<Member>();
 
@@ -280,13 +282,218 @@ namespace mmaTeamCDS_desktopApp
 
         private void button4_Click(object sender, EventArgs e)
         {
+            if (dataGridView1.SelectedCells.Count > 0)
+            {
+                int selectedrowindex = dataGridView1.SelectedCells[0].RowIndex;
+                DataGridViewRow selectedRow = dataGridView1.Rows[selectedrowindex];
 
+                var cardNumber = selectedRow.Cells[0].Value;
+
+                SqlConnection sqlConn = new SqlConnection(@"Server=.\SQLEXPRESS;Database=CDS;Integrated Security=true");
+
+                const string SQL_LOAD_MEMBER = @"SELECT FirstName, LastName, CardNumber, ScreenName, StartDate, EndDate
+                                                  FROM memberstable
+                                                  WHERE CardNumber = @CardNumber";
+
+                using (SqlCommand cmd = new SqlCommand(SQL_LOAD_MEMBER, sqlConn))
+                {
+                    RealMember member = new RealMember();
+
+                    sqlConn.Open();
+
+                    cmd.Parameters.Add("@CardNumber", SqlDbType.Int).Value = cardNumber;
+
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            member = new RealMember();
+                            member.CardNumber = Int32.Parse((reader["CardNumber"].ToString()));
+                            member.FirstName = reader["FirstName"].ToString();
+                            member.LastName = reader["LastName"].ToString();
+                            member.ScreenName = reader["ScreenName"].ToString();
+                            member.StartDate = DateTime.Parse(reader["StartDate"].ToString());
+                            member.EndDate = DateTime.Parse(reader["EndDate"].ToString());
+                        }
+                    }
+
+                    AddOrUpdateForm form = new AddOrUpdateForm(member);
+                    form.ShowDialog();
+                }
+            }
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
             AddOrUpdateForm mainForm = new AddOrUpdateForm();
             mainForm.ShowDialog();
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            if (String.IsNullOrWhiteSpace(textBox2.Text))
+            {
+                MessageBox.Show("Morate popuniti polje za broj dana.");
+            }
+            else
+            {
+                try
+                {
+                    Int32.Parse(textBox2.Text);
+                }
+                catch (Exception)
+                {
+                    return;
+                }
+
+                List<Member> listOfMembers = new List<Member>();
+
+                SqlConnection sqlConn = new SqlConnection(@"Server=.\SQLEXPRESS;Database=CDS;Integrated Security=true");
+
+                const string SQL_LOAD_MEMBERS_WHO_HAS_TO_PAY = @"SELECT CardNumber, ScreenName, StartDate, EndDate
+                                                                 FROM memberstable
+                                                                 WHERE EndDate BETWEEN GETUTCDATE() AND (GETUTCDATE() + @Days)";
+
+                using (SqlCommand cmd = new SqlCommand(SQL_LOAD_MEMBERS_WHO_HAS_TO_PAY, sqlConn))
+                {
+                    sqlConn.Open();
+
+                    cmd.Parameters.Add("@Days", SqlDbType.Int).Value = Int32.Parse(textBox2.Text);
+
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (reader.HasRows)
+                        {
+                            while (reader.Read())
+                            {
+                                Member member = new Member();
+                                member.Broj_kartice = Int32.Parse((reader["CardNumber"].ToString()));
+                                member.Član = reader["ScreenName"].ToString();
+                                member.Datum_uplate = DateTime.Parse(reader["StartDate"].ToString()).ToString("dddd, dd MMMM yyyy");
+                                member.Datum_isteka = DateTime.Parse(reader["EndDate"].ToString()).ToString("dddd, dd MMMM yyyy");
+
+                                listOfMembers.Add(member);
+                            }
+                        }
+                    }
+                }
+
+                dataGridView1.DataSource = listOfMembers;
+            }
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            if (dataGridView1.SelectedCells.Count > 0)
+            {
+                int selectedrowindex = dataGridView1.SelectedCells[0].RowIndex;
+                DataGridViewRow selectedRow = dataGridView1.Rows[selectedrowindex];
+
+                var cardNumber = selectedRow.Cells[0].Value;
+
+                DialogResult dialog = MessageBox.Show("Da li želite da izbrišete člana?", "Exit", MessageBoxButtons.YesNo);
+                if (dialog == DialogResult.Yes)
+                {
+                    textBox1.Clear();
+                    textBox2.Clear();
+                    List<Member> listOfMembers = new List<Member>();
+
+                    SqlConnection sqlConn = new SqlConnection(@"Server=.\SQLEXPRESS;Database=CDS;Integrated Security=true");
+
+                    const string SQL_DELETE_MEMBER = @"DELETE memberstable
+                                                       WHERE CardNumber = @CardNumber";
+
+                    const string SQL_LOAD_MEMBERS = @"SELECT CardNumber, ScreenName, StartDate, EndDate
+                                                      FROM memberstable
+                                                      ORDER BY FirstName, LastName";
+
+                    using (SqlCommand cmd = new SqlCommand(SQL_DELETE_MEMBER, sqlConn))
+                    {
+                        sqlConn.Open();
+
+                        cmd.Parameters.Add("@CardNumber", SqlDbType.Int).Value = cardNumber;
+
+                        cmd.ExecuteNonQuery();
+
+                        cmd.CommandText = SQL_LOAD_MEMBERS;
+
+                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            if (reader.HasRows)
+                            {
+                                while (reader.Read())
+                                {
+                                    Member member = new Member();
+                                    member.Broj_kartice = Int32.Parse((reader["CardNumber"].ToString()));
+                                    member.Član = reader["ScreenName"].ToString();
+                                    member.Datum_uplate = DateTime.Parse(reader["StartDate"].ToString()).ToString("dddd, dd MMMM yyyy");
+                                    member.Datum_isteka = DateTime.Parse(reader["EndDate"].ToString()).ToString("dddd, dd MMMM yyyy");
+
+                                    listOfMembers.Add(member);
+                                }
+                            }
+                        }
+                        dataGridView1.DataSource = listOfMembers;
+                    }
+                }
+                else if (dialog == DialogResult.No)
+                {
+
+                }
+            }
+        }
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+            if (dataGridView1.SelectedCells.Count > 0)
+            {
+                List<Member> listOfMembers = new List<Member>();
+
+                int selectedrowindex = dataGridView1.SelectedCells[0].RowIndex;
+                DataGridViewRow selectedRow = dataGridView1.Rows[selectedrowindex];
+
+                var cardNumber = selectedRow.Cells[0].Value;
+
+                SqlConnection sqlConn = new SqlConnection(@"Server=.\SQLEXPRESS;Database=CDS;Integrated Security=true");
+
+                const string SQL_UPDATE_DATES_OF_A_MEMBER = @"UPDATE memberstable
+                                                          SET StartDate = EndDate, EndDate = DATEADD(month, 1, EndDate)
+                                                          WHERE CardNumber = @CardNumber";
+
+                const string SQL_LOAD_MEMBERS = @"SELECT CardNumber, ScreenName, StartDate, EndDate
+                                                  FROM memberstable
+                                                  ORDER BY FirstName, LastName";
+
+                using (SqlCommand cmd = new SqlCommand(SQL_UPDATE_DATES_OF_A_MEMBER, sqlConn))
+                {
+                    sqlConn.Open();
+
+                    cmd.Parameters.Add("@CardNumber", SqlDbType.Int).Value = cardNumber;
+
+                    cmd.ExecuteNonQuery();
+
+                    cmd.CommandText = SQL_LOAD_MEMBERS;
+
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (reader.HasRows)
+                        {
+                            while (reader.Read())
+                            {
+                                Member member = new Member();
+                                member.Broj_kartice = Int32.Parse((reader["CardNumber"].ToString()));
+                                member.Član = reader["ScreenName"].ToString();
+                                member.Datum_uplate = DateTime.Parse(reader["StartDate"].ToString()).ToString("dddd, dd MMMM yyyy");
+                                member.Datum_isteka = DateTime.Parse(reader["EndDate"].ToString()).ToString("dddd, dd MMMM yyyy");
+
+                                listOfMembers.Add(member);
+                            }
+                        }
+                    }
+
+                    dataGridView1.DataSource = listOfMembers;
+                }
+            }
         }
     }
 }

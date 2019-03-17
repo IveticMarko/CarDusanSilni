@@ -13,9 +13,26 @@ namespace mmaTeamCDS_desktopApp
 {
     public partial class AddOrUpdateForm : Form
     {
+        public Boolean isUpdateState = false;
+
         public AddOrUpdateForm()
         {
             InitializeComponent();
+
+            button3.Hide();
+        }
+
+        public AddOrUpdateForm(RealMember member)
+        {
+            InitializeComponent();
+
+            button1.Hide();
+
+            textBox1.Text = member.FirstName;
+            textBox2.Text = member.LastName;
+            textBox3.Text = member.CardNumber.ToString();
+            dateTimePicker1.Value = member.StartDate;
+            dateTimePicker2.Value = member.EndDate;
         }
 
         private void textBox3_TextChanged(object sender, EventArgs e)
@@ -31,6 +48,8 @@ namespace mmaTeamCDS_desktopApp
         private void button1_Click(object sender, EventArgs e)
         {
             SqlConnection sqlConn = new SqlConnection(@"Server=.\SQLEXPRESS;Database=CDS;Integrated Security=true");
+
+            var hasInsertedMember = 0;
 
             const string SQL_INSERT_NEW_MEMBER = @"IF NOT EXISTS (SELECT 1
 			                                                      FROM memberstable
@@ -58,11 +77,23 @@ namespace mmaTeamCDS_desktopApp
                     cmd.Parameters.Add("@StartDate", SqlDbType.DateTime).Value = dateTimePicker1.Value;
                     cmd.Parameters.Add("@EndDate", SqlDbType.DateTime).Value = dateTimePicker2.Value;
 
-                    cmd.ExecuteNonQuery();
+                    hasInsertedMember = cmd.ExecuteNonQuery();
                 }
 
-                this.Close();
+                if (hasInsertedMember == -1)
+                {
+                    MessageBox.Show("Broj kartice " + textBox3.Text + " je zauzet.");
+                }
+                else
+                {
+                    this.Close();
+                }
             }
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
