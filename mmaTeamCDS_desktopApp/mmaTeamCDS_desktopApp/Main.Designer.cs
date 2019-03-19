@@ -116,7 +116,7 @@
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(255, 34);
             this.button2.TabIndex = 1;
-            this.button2.Text = "Beleške";
+            this.button2.Text = ":)";
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
