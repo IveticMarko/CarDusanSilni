@@ -163,6 +163,7 @@ namespace mmaTeamCDS_desktopApp
             catch (Exception)
             {
                 MessageBox.Show("Broj dana mora biti broj a ne slovo ili neki drugi karakter!");
+                return;
             }
 
             if (String.IsNullOrWhiteSpace(textBox4.Text))

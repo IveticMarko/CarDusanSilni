@@ -34,6 +34,7 @@
             // 
             // pictureBox1
             // 
+            this.pictureBox1.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.pictureBox1.Image = global::mmaTeamCDS_desktopApp.Properties.Resources.images;
             this.pictureBox1.Location = new System.Drawing.Point(222, 131);
             this.pictureBox1.Name = "pictureBox1";

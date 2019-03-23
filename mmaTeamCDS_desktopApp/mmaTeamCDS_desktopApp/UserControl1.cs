@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Data.SqlClient;
+using System.Threading;
 
 namespace mmaTeamCDS_desktopApp
 {
@@ -230,6 +231,8 @@ namespace mmaTeamCDS_desktopApp
         {
             textBox1.Clear();
             textBox2.Clear();
+            radioButton1.Checked = false;
+            radioButton2.Checked = false;
 
             List<Member> listOfMembers = new List<Member>();
 
@@ -562,6 +565,95 @@ namespace mmaTeamCDS_desktopApp
 
                 }
             }
+        }
+
+        private void backgroundWorker_DoWork(object sender, DoWorkEventArgs e)
+        {
+            DGV_To_Excel(dataGridView1);
+        }
+
+        private void backgroundWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            progressBar1.Value = e.ProgressPercentage;
+            lblStatus.Text = string.Format("{0}%", e.ProgressPercentage);
+            progressBar1.Update();
+        }
+
+        private void backgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            if (e.Error == null)
+            {
+                Thread.Sleep(100);
+            }
+        }
+
+        private void button8_Click(object sender, EventArgs e)
+        {
+            if (backgroundWorker.IsBusy)
+            {
+                return;
+            }
+            //using (SaveFileDialog sfd = new SaveFileDialog() { Filter = "Excel Workbook|*.xls" })
+            //{
+            //    if (sfd.ShowDialog() == DialogResult.OK)
+            //    {
+
+            //    }
+            //}
+            progressBar1.Minimum = 0;
+            progressBar1.Value = 0;
+            backgroundWorker.RunWorkerAsync();
+
+            //DGV_To_Excel(dataGridView1);
+        }
+
+        private void DGV_To_Excel(DataGridView dataGridView)
+        {
+            backgroundWorker.ReportProgress(2);
+
+            Microsoft.Office.Interop.Excel._Application app = new Microsoft.Office.Interop.Excel.Application();
+            Microsoft.Office.Interop.Excel._Workbook workbook = app.Workbooks.Add(Type.Missing);
+            Microsoft.Office.Interop.Excel._Worksheet worksheet = null;
+
+            //app.Visible = true;
+            worksheet = workbook.Sheets["Sheet1"];
+            worksheet = workbook.ActiveSheet;
+
+            //for (int i = 1; i < dataGridView.Columns.Count + 1; i++)
+            //{
+            //    worksheet.Cells[i, i + 1] = dataGridView.Columns[i - 1].HeaderText;
+            //}
+
+            int k = 1;
+            worksheet.Cells[k, k + 1] = dataGridView.Columns[k - 1].HeaderText;
+            worksheet.Cells[k, k + 2] = dataGridView.Columns[k].HeaderText;
+            worksheet.Cells[k, k + 3] = dataGridView.Columns[k + 1].HeaderText;
+            worksheet.Cells[k, k + 4] = dataGridView.Columns[k + 2].HeaderText;
+
+            var index = 1;
+            var process = dataGridView.Rows.Count;
+
+            for (int i = 0; i < dataGridView.Rows.Count; i++)
+            {
+                backgroundWorker.ReportProgress(index++ * 100 / process);
+                for (int j = 0; j < dataGridView.Columns.Count; j++)
+                {
+                    if (dataGridView.Rows[i].Cells[j].Value != null)
+                    {
+                        worksheet.Cells[i + 2, j + 2] = dataGridView.Rows[i].Cells[j].Value.ToString();
+                    }
+                    else
+                    {
+                        worksheet.Cells[i + 2, j + 2] = "";
+                    }
+                }
+            }
+            //for (int i = 0; i < dataGridView.Rows.Count; i++)
+            //{
+            //    worksheet.Cells[i + 2, i] = dataGridView.Rows[i].HeaderCell.Value;
+            //}
+
+            app.Visible = true;
         }
     }
 }
